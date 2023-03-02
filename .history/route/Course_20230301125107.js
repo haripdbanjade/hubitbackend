@@ -27,7 +27,7 @@ const MyModel = require('../modal/Course')
  *           duration:
  *             type: integer
  *             descrption: this is course duration
- *           file:
+ *           image:
  *             type: file
  *             description: this is image
  *           description:
@@ -94,7 +94,6 @@ router.get("/:id", Course.getCourses);
  */
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    console.log(req, file)
     cb(null, "public");
   },
   filename: function (req, file, cb) {

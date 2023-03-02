@@ -1,33 +1,33 @@
 var express = require("express");
-var Course = require("../controller/Courses");
+var onlineForm = require("../controller/onlineform");
 const path = require("path");
 const multer = require("multer");
 // const uuid = require("uuid/v4");
 const router = express.Router();
 // var mongoose = require("mongoose");
-const MyModel = require('../modal/Course')
+// const MyModel = require('../modal/Course')
 /**
  * @swagger
  * components:
  *   schemas:
- *     courseDto:
+ *     onlineFormDto:
  *         type: object
  *         required:
- *           - course_name
+ *           - name
  *         properties:
  *           _id:
  *              type: string
  *              description: this is auto genereated id
- *           course_name:
+ *           name:
  *             type: string
  *             description: this course name
- *           course_category:
+ *           address:
  *             type: string
  *             description: this is course category
  *           duration:
  *             type: integer
  *             descrption: this is course duration
- *           file:
+ *           image:
  *             type: file
  *             description: this is image
  *           description:
@@ -49,7 +49,7 @@ const MyModel = require('../modal/Course')
 
 // /**
 //  * @swagger
-//  * /course:
+//  * /onlineform:
 //  *   get:
 //  *     summary: Returns all courses
 //  *     tags: [Course]
@@ -65,7 +65,7 @@ const MyModel = require('../modal/Course')
 //  */
 /**
  * @swagger
- * /course:
+ * /onlineform:
  *  get:
  *     summary: Use to request all course
  *     tags: [Course]
@@ -74,11 +74,11 @@ const MyModel = require('../modal/Course')
  *          description: A sucessfull response
  */
 
-router.get("/", Course.getCourse);
-router.get("/:id", Course.getCourses);
+router.get("/", onlineForm.getOnlineForm);
+router.get("/:id", onlineForm.getForm);
 /**
  * @swagger
- * /course/files:
+ * /onlineform/files:
  *  post:
  *    summary: create new courses
  *    tags: [Course]
@@ -93,26 +93,25 @@ router.get("/:id", Course.getCourses);
  *          description: A sucessfull response
  */
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    console.log(req, file)
-    cb(null, "public");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
+    destination: function (req, file, cb) {
+        cb(null, "public");
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    },
 });
 const upload = multer({ storage: storage });
 router.post(
-  "/files",
-  upload.single("file"),
-  Course.PostCourse
-  // Course.PostCourse
+    "/files",
+    upload.single("file"),
+    onlineForm.PostOnlineForm
+    // Course.PostCourse
 );
 
 // delete
 /**
  * @swagger
- * /course/{userId}:
+ * /onlineform/{userId}:
  *  delete:
  *      description: Delete user
  *      parameters:
@@ -126,11 +125,11 @@ router.post(
  *          200:
  *              description: User that was deleted
  */
-router.delete("/:id", Course.DeleteCourse);
+router.delete("/:id", onlineForm.DeleteForm);
 router.put(
-  "/files/:id",
-  upload.single("file"),
-  Course.updateCourse
+    "/files/:id",
+    upload.single("file"),
+    onlineForm.updateForm
 
 );
 

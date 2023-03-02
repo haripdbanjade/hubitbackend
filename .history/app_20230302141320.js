@@ -40,7 +40,6 @@ const QuickCall = require("./route/QuickCall");
 const onlineForm = require("./route/onlineform");
 const Instructor = require("./route/instructor");
 const FeaturedCourse = require("./route/featuredcourse");
-const Review = require("./route/review")
 app.get("/", (req, res) => {
   res.send("this is for hubit");
 });
@@ -52,7 +51,6 @@ app.use("/quickcall", QuickCall)
 app.use("/onlineform", onlineForm);
 app.use("/instructor", Instructor);
 app.use("/featuredcourse", FeaturedCourse);
-app.use("/review", Review);
 // mongoodb connection
 const CONNECTION_URL = process.env.CONNECTION_URL;
 const PORT = process.env.PORT || 4000;

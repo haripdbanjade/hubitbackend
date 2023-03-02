@@ -27,7 +27,7 @@ const MyModel = require('../modal/Course')
  *           duration:
  *             type: integer
  *             descrption: this is course duration
- *           file:
+ *           image:
  *             type: file
  *             description: this is image
  *           description:
