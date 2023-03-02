@@ -1,16 +1,16 @@
 var express = require("express");
-var Course = require("../controller/Courses");
+var Review = require("../controller/review");
 const path = require("path");
 const multer = require("multer");
 // const uuid = require("uuid/v4");
 const router = express.Router();
 // var mongoose = require("mongoose");
-const MyModel = require('../modal/Course')
+// const MyModel = require('../modal/Course')
 /**
  * @swagger
  * components:
  *   schemas:
- *     courseDto:
+ *     reviewDto:
  *         type: object
  *         required:
  *           - course_name
@@ -27,7 +27,7 @@ const MyModel = require('../modal/Course')
  *           duration:
  *             type: integer
  *             descrption: this is course duration
- *           file:
+ *           image:
  *             type: file
  *             description: this is image
  *           description:
@@ -49,10 +49,10 @@ const MyModel = require('../modal/Course')
 
 // /**
 //  * @swagger
-//  * /course:
+//  * /review:
 //  *   get:
 //  *     summary: Returns all courses
-//  *     tags: [Course]
+//  *     tags: [Review]
 //  *     responses:
 //  *       200:
 //  *         description: this is the list of all courses
@@ -65,7 +65,7 @@ const MyModel = require('../modal/Course')
 //  */
 /**
  * @swagger
- * /course:
+ * /review:
  *  get:
  *     summary: Use to request all course
  *     tags: [Course]
@@ -74,11 +74,11 @@ const MyModel = require('../modal/Course')
  *          description: A sucessfull response
  */
 
-router.get("/", Course.getCourse);
-router.get("/:id", Course.getCourses);
+router.get("/", Review.getReview);
+// router.get("/:id", Course.getCourses);
 /**
  * @swagger
- * /course/files:
+ * /review/files:
  *  post:
  *    summary: create new courses
  *    tags: [Course]
@@ -93,20 +93,18 @@ router.get("/:id", Course.getCourses);
  *          description: A sucessfull response
  */
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    console.log(req, file)
-    cb(null, "public");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
+    destination: function (req, file, cb) {
+        cb(null, "public");
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    },
 });
 const upload = multer({ storage: storage });
 router.post(
-  "/files",
-  upload.single("file"),
-  Course.PostCourse
-  // Course.PostCourse
+    "/files",
+    upload.single("file"),
+    Review.PostReview
 );
 
 // delete
@@ -128,9 +126,9 @@ router.post(
  */
 router.delete("/:id", Course.DeleteCourse);
 router.put(
-  "/files/:id",
-  upload.single("file"),
-  Course.updateCourse
+    "/files/:id",
+    upload.single("file"),
+    Course.updateCourse
 
 );
 

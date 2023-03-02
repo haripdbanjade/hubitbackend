@@ -45,28 +45,36 @@ module.exports.PostCourse = async (req, res, upload) => {
   }
 };
 
-
-// update request
+// Update request
 module.exports.updateCourse = (req, res) => {
-  const { id } = req.params;
-  const { course_name, course_category, duration, description } = req.body;
-  const imagePath = req?.file?.path;
 
-  CourseModal.findByIdAndUpdate(
-    id,
-    { $set: { course_name, course_category, duration, description, image: imagePath } },
-    { new: true },
-    (error, updatedCourse) => {
-      if (error) {
-        console.log(error);
-        res.send(error);
-      } else {
-        console.log(updatedCourse);
-        res.send(updatedCourse);
-      }
+
+  CourseModal.updateOne({ _id: req.params.id }, { $set: req.body }, (error) => {
+    if (error) {
+      console.log(error);
+      res.send(error);
+    } else {
+
+      console.log(req.file)
+      console.log('Success');
+      res.send('Success');
     }
-  );
+  });
 };
+// Update request for Image
+// module.exports.updateCourseImage = (req, res, upload) => {
+//   CourseModal.updateOne({ _id: req.params.id }, { $set: req?.file?.path }, (error) => {
+//     if (error) {
+//       console.log(error)
+//       res.send(error);
+
+//     }
+//     else {
+//       console.log(req.body)
+//     }
+//   })
+// }
+// single task update
 // Delete request
 module.exports.DeleteCourse = (req, res) => {
   CourseModal.findByIdAndDelete(req.params.id, (err, data) => {
