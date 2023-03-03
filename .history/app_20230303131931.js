@@ -41,9 +41,7 @@ const onlineForm = require("./route/onlineform");
 const Instructor = require("./route/instructor");
 const FeaturedCourse = require("./route/featuredcourse");
 const Review = require("./route/review");
-const Aboutus = require("./route/aboutusdetail");
-const TeamMember = require("./route/teammember");
-const Achievement = require("./route/achievement");
+const Aboutus = require("./route/aboutusdetail")
 app.get("/", (req, res) => {
   res.send("this is for hubit");
 });
@@ -57,9 +55,6 @@ app.use("/instructor", Instructor);
 app.use("/featuredcourse", FeaturedCourse);
 app.use("/review", Review);
 app.use("/aboutus", Aboutus);
-app.use("/teammember", TeamMember);
-app.use("/achievement", Achievement)
-
 // mongoodb connection
 const CONNECTION_URL = process.env.CONNECTION_URL;
 const PORT = process.env.PORT || 4000;
