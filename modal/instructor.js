@@ -7,10 +7,16 @@ const InstructorSchema = mongoose.Schema({
     aboutMe: String,
     skill: String,
     experience: String,
+    // course: { type: mongoose.Schema.Types.ObjectId, ref: "course" },
+    courseId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'CourseModal',
+    },
     createdAt: {
         type: Date,
         default: new Date(),
     },
 });
+
 const InstructorModal = mongoose.model("instructor", InstructorSchema);
 module.exports = InstructorModal;

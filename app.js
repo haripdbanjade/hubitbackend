@@ -44,9 +44,13 @@ const Review = require("./route/review");
 const Aboutus = require("./route/aboutusdetail");
 const TeamMember = require("./route/teammember");
 const Achievement = require("./route/achievement");
+const Placement = require("./route/placement");
+// const Login = require("./route/login");
+// const User = require("./route/login");
 app.get("/", (req, res) => {
   res.send("this is for hubit");
 });
+
 app.use("/course", Course);
 app.use("/category", Category);
 app.use("/syallabus", Syallabus);
@@ -59,7 +63,9 @@ app.use("/review", Review);
 app.use("/aboutus", Aboutus);
 app.use("/teammember", TeamMember);
 app.use("/achievement", Achievement)
-
+app.use("/placement", Placement);
+// app.use("/login", Login);
+// app.use("/user", User);
 // mongoodb connection
 const CONNECTION_URL = process.env.CONNECTION_URL;
 const PORT = process.env.PORT || 4000;

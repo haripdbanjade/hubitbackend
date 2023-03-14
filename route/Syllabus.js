@@ -51,7 +51,7 @@ const path = require("path");
  *    summary: Use to request all syallabus by id
  *    tags: [Syallabus]
  *    parameters:
- *      - in: path
+ *      - in: path 
  *        name: id
  *        schema:
  *          type: string
@@ -64,9 +64,10 @@ const path = require("path");
 
 const router = express.Router();
 router.get("/:id", Syallabus.getSyallabus);
+
 /**
  * @swagger
- * /syallabus:
+ * /course/{id}/syallabus:
  *  post:
  *    summary: create new syallabus
  *    tags: [Syallabus]
@@ -80,8 +81,8 @@ router.get("/:id", Syallabus.getSyallabus);
  *        '201':
  *          description: A sucessfull response
  */
-router.post("/", Syallabus.PostSyallabus);
-
+// router.post("/", Syallabus.PostSyallabus);
+router.post('/:id', Syallabus.PostSyallabus)
 // delete
 // router.delete('/:id',Syallabus.DeleteSyallabus)
 
@@ -128,6 +129,10 @@ router.post("/", Syallabus.PostSyallabus);
  *       '200':
  *         description: A sucessfull response
  */
-router.post("/subsection/:id", Syallabus.PostSubSection);
 
+router.delete("/:id/:section_id", Syallabus.DeleteSection);
+
+router.post("/subsection/:id", Syallabus.PostSubSection);
+router.put("/:id/:section_id", Syallabus.UpdateSection);
+router.delete("/subsection/:id/:section_id/:sub_id", Syallabus.deleteSubSection);
 module.exports = router;

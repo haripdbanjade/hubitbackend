@@ -32,7 +32,10 @@ module.exports.PostFeaturedCourse = async (req, res, upload) => {
         await featuredCourseData.validate(req.body);
         const url = req.protocol + '://' + req.get('host')
         const newFeaturedCourse = new featureCourseModal({
-            startedAt: req.body.startedAt,
+            image: req?.file?.path,
+            title: req.body.title,
+            description: req.body.description,
+            startedDate: req.body.startedDate,
             price: req.body.price,
         });
         await newFeaturedCourse.save();
@@ -41,20 +44,42 @@ module.exports.PostFeaturedCourse = async (req, res, upload) => {
         res.status(422).json({ message: err.message })
     }
 }
-// Update Request
+// update request
 module.exports.updateFeaturedCourse = (req, res) => {
-    featureCourseModal.updateOne({ _id: req.params.id }, { $set: req.body }, (error) => {
-        if (error) {
-            console.log(error);
-            res.send(error);
-            console.log("Data cannot be Updated")
-        } else {
-            console.log('Success');
-            res.send('Success');
-            console.log("Successfully updated")
+    const { id } = req.params;
+    const { title, startedDate, description } = req.body;
+    const imagePath = req?.file?.path;
+
+    CourseModal.findByIdAndUpdate(
+        id,
+        { $set: { title, startedDate, description, image: imagePath } },
+        { new: true },
+        (error, updatedCourse) => {
+            if (error) {
+                console.log(error);
+                res.send(error);
+            } else {
+                console.log(updatedCourse);
+                res.send(updatedCourse);
+            }
         }
-    });
-}
+    );
+};
+// Update Request
+// module.exports.updateFeaturedCourse = (req, res) => {
+//     featureCourseModal.updateOne({ _id: req.params.id }, { $set: req.body }, (error) => {
+//         if (error) {
+//             console.log(error);
+//             res.send(error);
+//             console.log("Data cannot be Updated")
+//         } else {
+//             console.log('Success');
+//             res.send('Success');
+//             console.log("Successfully updated")
+//         }
+//     });
+// }
+
 // Delete request   
 module.exports.DeleteFeaturedCourse = (req, res) => {
     featureCourseModal.findByIdAndDelete(req.params.id, (err, data) => {

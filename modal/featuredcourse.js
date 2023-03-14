@@ -1,5 +1,7 @@
 var mongoose = require("mongoose");
 const featureCourseSchema = mongoose.Schema({
+    title: String,
+    description: String,
     startedDate: String,
     price: String,
     createdAt: {

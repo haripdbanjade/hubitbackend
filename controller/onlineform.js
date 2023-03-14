@@ -24,32 +24,33 @@ module.exports.getForm = async (req, res) => {
 // post request 
 module.exports.PostOnlineForm = async (req, res, upload) => {
     const formData = yup.object().shape({
-        name: yup.string().required("name is required"),
-        email: yup.string().required("no input for email").email("valid email is required"),
-        phone: yup.string().required().min(10, "invalid phone"),
+        // name: yup.string().required("name is required"),
+        // email: yup.string().required("no input for email").email("valid email is required"),
+        // phone: yup.string().required().min(10, "invalid phone"),
     })
 
     try {
         await formData.validate(req.body);
-        console.log(req.file);
+        console.log(req.file, req.body);
         // const url = req.protocol + '://' + req.get('host')
         const newForm = new formModel({
             image: req?.file?.path,
-            name: req.body.name,
+            full_name: req.body.full_name,
             address: req.body.address,
-            dateOfBirth: req.body.dateOfBirth,
+            dob: req.body.dob,
             email: req.body.email,
-            phone: req.body.phone,
+            phone_number: req.body.phone_number,
             gender: req.body.gender,
-            levelOfEducation: req.body.levelOfEducation,
-            guardianName: req.body.guardianName,
-            guardianNumber: req.body.guardianNumber,
-            collegeOrSchoolName: req.body.collegeOrSchoolName,
-            courseName: req.body.courseName,
-            shiftTime: req.body.shiftTime,
+            level_of_education: req.body.level_of_education,
+            guardians_name: req.body.guardians_name,
+            guardians_phone_number: req.body.guardians_phone_number,
+            school_or_clg_name: req.body.school_or_clg_name,
+            course_names: req.body.course_names,
+            shifts: req.body.shifts,
         });
         await newForm.save();
         res.status(201).json({ data: newForm, message: 'online form has been addded' })
+        console.log(newForm)
     } catch (err) {
         res.status(422).json({ message: err.message })
     }

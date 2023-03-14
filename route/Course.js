@@ -76,13 +76,31 @@ router.get("/:id", Course.getCourses);
  *        '201':
  *          description: A sucessfull response
  */
+// const Storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     console.log(req, file)
+//     cb(null, 'public');
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, file.originalname);
+//   },
+// });
+// const upload = multer({ storage: Storage });
+// router.post(
+//   "/files",
+//   upload.single("file"),
+//   Course.PostCourse
+//   // Course.PostCourse
+// );
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    console.log(req, file)
     cb(null, "public");
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    cb(
+      null, file.originalname
+      // file.fieldname + "_" + Date.now() + path.extname(file.originalname),
+    );
   },
 });
 const upload = multer({ storage: storage });
@@ -92,7 +110,6 @@ router.post(
   Course.PostCourse
   // Course.PostCourse
 );
-
 // delete
 /**
  * @swagger
@@ -115,7 +132,6 @@ router.put(
   "/files/:id",
   upload.single("file"),
   Course.updateCourse
-
 );
 
 module.exports = router;

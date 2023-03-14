@@ -25,11 +25,12 @@ const router = express.Router();
  */
 
 router.get("/", Instructor.getInstructor);
-router.get("/:id", Instructor.getSingleInstructor);
+// router.get("/:id", Instructor.getSingleInstructor);
+router.get("/:courseId", Instructor.getSingleInstructorFromCourse);
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "public");
+        cb(null, path.join(__dirname, '../public'));
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -42,7 +43,7 @@ router.post(
     Instructor.PostInstructor
     // Course.PostCourse
 );
-router.post("/files/:id", Instructor.PostInstructor)
+// router.post("/files/", upload.single("file"), Instructor.PostInstructor)
 // delete
 
 router.delete("/:id", Instructor.DeleteInstructor);

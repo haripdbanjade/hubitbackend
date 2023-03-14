@@ -10,14 +10,14 @@ module.exports.getReview = async (req, res) => {
         res.status(404).json({ messege: err.message, status: err.status });
     }
 };
-// // get single course
+// // get single review
 // module.exports.getsingle = async (req, res) => {
-//   try {
-//     const CourseData = await CourseModal.findById({ _id: req.params.id });
-//     res.status(200).json({ data: CourseData, message: "course fetched" });
-//   } catch (err) {
-//     res.status(404).json({ messege: err.message, status: err.status });
-//   }
+//     try {
+//         const CourseData = await CourseModal.findById({ _id: req.params.id });
+//         res.status(200).json({ data: CourseData, message: "course fetched" });
+//     } catch (err) {
+//         res.status(404).json({ messege: err.message, status: err.status });
+//     }
 // }
 // post request
 module.exports.PostReview = async (req, res, upload) => {
@@ -31,7 +31,6 @@ module.exports.PostReview = async (req, res, upload) => {
             image: req?.file?.path,
             name: reviewData.name,
             course_name: reviewData.course_name,
-
             description: reviewData.description,
 
         });
