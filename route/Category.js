@@ -1,6 +1,7 @@
 const express = require("express");
 const Category = require("../controller/Category");
 const multer = require("multer")
+const uploadImage = require("../service/firebase")
 /**
  * @swagger
  * components:
@@ -17,8 +18,8 @@ const multer = require("multer")
  *           color:
  *             type: string
  *             description: this is category color
- *           image:
- *             type: string
+ *           file:
+ *             type: file
  *         example:
  *           _id: dfs43gfsdghshdsj
  *           category_name: kisan mahat
@@ -64,14 +65,14 @@ router.get("/", Category.getCategory);
 router.get("/:id", Category.getCategorys)
 /**
  * @swagger
- * /category:
+ * /category/files:
  *  post:
  *    summary: create new category
  *    tags: [Category]
  *    requestBody:
  *      required: true
  *      content:
- *        application/json:
+ *        multipart/form-data:
  *          schema:
  *            $ref: '#/components/schemas/categoryDto'
  *    responses:
@@ -86,13 +87,14 @@ const storage = multer.diskStorage({
         cb(null, file.originalname);
     },
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage(), });
 router.post(
     "/files",
-    upload.single("file"),
+    upload.any("file"), uploadImage,
     Category.PostCategory
     // Course.PostCourse
 );
+router.put("/files", upload.any("file"), uploadImage, Category.updateCategory)
 router.delete("/:id", Category.DeleteCategory)
 // router.post("/", Category.PostCategory);
 module.exports = router;

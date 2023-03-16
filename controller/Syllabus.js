@@ -1,107 +1,212 @@
 var mongoose = require("mongoose");
 var CourseModal = require("../modal/Course");
 const uuid = require("uuid");
-
+const { updateCourse } = require("./Courses");
 // get request
 module.exports.getSyallabus = async (req, res) => {
-  var { id } = req.params;
-  console.log(id, req.params);
   try {
-    const CourseData = await CourseModal.findById(id);
-    console.log(CourseData.syallabus);
-    res
-      .status(200)
-      .json({ data: CourseData.syallabus, message: "course fetched" });
+    const course = await CourseModal.findById(req.params.id);
+    // console.log(course)
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+    res.json(course.syallabus);
+    // console.log(course.syallabus)
   } catch (err) {
-    res.status(404).json({ messege: err.message, status: err.status });
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
   }
 };
+// Get a single syllabus item
+// Get a single section
+module.exports.getSingleSection = async (req, res) => {
+  try {
+    const course = await CourseModal.findById(req.params.id);
+    // console.log(course)
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+    const Section = course.syallabus.find(item => item.section_id === req.params.section_id);
+    if (!Section) {
+      return res.status(404).json({ message: 'Section not found' });
+    }
+    res.json(Section);
+    // console.log(section)
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+// get single sub section
+// Get a single sub-section
+// module.exports.getSingleSubSection = async (req, res) => {
+//   try {
+//     const course = await CourseModal.findById(req.params.id);
+//     // console.log(course)
+//     if (!course) {
+//       return res.status(404).json({ message: 'Course not found' });
+//     }
+//     const Section = course.syallabus.find(item => item.section_id === req.params.section_id);
+//     if (!Section) {
+//       return res.status(404).json({ message: 'Section not found' });
+//     }
+//     const subSection = Section.subSection.find(item => item.sub_id === req.params.sub_id);
+//     console.log(subSection)
+//     if (!subSection) {
+//       return res.status(404).json({ message: 'Sub-section not found' });
+//     }
+//     res.json(subSection);
+//     console.log(subSection)
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };
 
-// get request
+
+
+
+//section post request
+// module.exports.PostSyallabus = async (req, res) => {
+//   const { Section } = req.body;
+//   const newSection = {
+//     Section: Section,
+//     section_id: uuid.v4(),
+//     // subSection: Section.map((val, i) => ({
+//     //   subSection: val,
+//     //   id: uuid.v4(),
+//     // })),
+
+//   };
+
+//   try {
+//     const course = await CourseModal.findByIdAndUpdate(
+//       req.params.id,
+//       {
+//         $push: { syallabus: newSection },
+//       },
+//       { new: true }
+//     );
+//     res.json(course.syallabus);
+//     console.log(course.syallabus)
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };
+module.exports.PostSyallabus = async (req, res, upload) => {
+  req.body.section_id = uuid.v4();
+  console.log(req.body, req.params)
+  try {
+    const UpdateCourse = await CourseModal.findById(req.params.id)
+    console.log(UpdateCourse)
+    UpdateCourse.syallabus.push(req.body);
+    console.log(UpdateCourse, "selected");
+    await CourseModal.findByIdAndUpdate(UpdateCourse._id, UpdateCourse, { new: true }).then(result => {
+      res.status(201).json({ message: 'section has been addded', result })
+    }).catch(err => {
+      res.status(500).json({ msg: 'error' })
+    })
+  } catch (err) {
+    res.status(404).json({ message: 'oops' })
+  }
+}
+
+// sub section
 module.exports.PostSubSection = async (req, res) => {
   var { id } = req.params;
-  let newId = uuid.v4();
-  console.log(req.body, newId);
-  const SyallabusData = {};
-  SyallabusData.id = newId;
-  SyallabusData.subSection = req.body.SubSection;
+  console.log(req.body, uuid.v4())
+  req.body.sub_id = uuid.v4();
   try {
-    const UpdateCourse = await CourseModal.findById(req.body._id);
+    const UpdateCourse = await CourseModal.findById({
+      _id: id
+    })
+    UpdateCourse.syallabus.map((val, i) => {
 
-    const CourseDatad = await CourseModal.find({ "syallabus.sectiont_id": id });
-    CourseDatad[0].syallabus.map((val, i) => {
-      // console.log(val,val.Section,id,"jj")
-      if (val.sectiont_id === id) {
-        console.log(val.Section);
-        val.subSection.push(SyallabusData);
+      if (val.section_id === req.body.section_id) {
+        console.log(val.Section, "ok")
+        val.subSection.push(req.body)
+        console.log(UpdateCourse, "selected");
       }
-    });
-    // let values=CourseData
-    console.log(UpdateCourse, CourseDatad);
-    // await CourseModal.findByIdAndUpdate(CourseDatad_id,CourseDatad,{new:true});
-    await CourseModal.findByIdAndUpdate(req.body._id, ...CourseDatad, {
-      new: true,
-    });
-
-    // console.log(CourseDatad,"finding")
-    res.status(200).json({ message: "sub section has been added" });
-  } catch (err) {
-    res.status(404).json({ messege: err.message, status: err.status });
+    })
+    await CourseModal.findByIdAndUpdate(UpdateCourse._id, UpdateCourse, { new: true }).then(result => {
+      res.status(201).json({ message: 'sub section has been addded', result })
+    }).catch(err => {
+      res.status(500).json({ msg: 'error' })
+    })
   }
-};
 
-// post request
-
-module.exports.PostSyallabus = async (req, res, upload) => {
-  let newId = uuid.v4();
-  console.log(req.body, newId);
-  const SyallabusData = req.body;
-  SyallabusData.section_id = newId;
-  SyallabusData.Section = req.body.Section;
-
+  catch (err) {
+    res.status(404).json({ messege: err.message, status: err.status })
+  }
+}
+// delete section
+module.exports.DeleteSection = async (req, res) => {
   try {
-    const UpdateCourse = await CourseModal.findById(req.body._id);
-    // console.log(UpdateCourse.syallabus.push(SyallabusData),"selected");
-
-    // const newCourse=new CourseModal({
-    //     course_name:courseData.course_name,
-    //     course_category:courseData.course_category,
-    //     duration:courseData.duration,
-    //     description:courseData.description,
-    //     syallabus:[],
-    //     image:courseData.image
-    // });
-    // await newCourse.save();
-    UpdateCourse.syallabus.push(SyallabusData);
-    console.log(SyallabusData);
-    await CourseModal.findByIdAndUpdate(UpdateCourse._id, UpdateCourse, {
-      new: true,
-    });
-
-    res.status(201).json({ message: "section has been addded" });
+    const course = await CourseModal.findById(req.params.id);
+    const sectionIndex = course.syallabus.findIndex(
+      (Section) => Section.section_id === req.params.section_id
+    );
+    if (sectionIndex === -1) {
+      return res.status(404).json({ message: 'Section not found' });
+    }
+    course.syallabus.splice(sectionIndex, 1);
+    await course.save();
+    res.json({ message: 'Section has been deleted' });
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+// update section
+module.exports.UpdateSection = async (req, res) => {
+  try {
+    const course = await CourseModal.findById(req.params.id);
+    const sectionIndex = course.syallabus.findIndex(
+      (Section) => Section.section_id === req.params.section_id
+    );
+    if (sectionIndex === -1) {
+      return res.status(404).json({ message: 'Section not found' });
+    }
+    const Section = course.syallabus[sectionIndex];
+    Section.Section = req.body.Section;
+    await course.save();
+    res.json({ message: 'Section has been updated' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
-// update request
-// module.exports.UpdateCourses=async(req,res)=>{
-//     const {id:_id} = req.params;
-//     if(mongoose.Types.ObjectId.isValid(id)) return res.status(404).json({message:'no course with that id found'});
-//     const UpdateCourse=await CourseModal.findByIdAndUpdate(_id,req.body,{new:true})
-//     res.status(200).json({message:'course has been updated'})
+// sub section delete
+module.exports.deleteSubSection = async (req, res) => {
+  const { id } = req.params;
+  const { sub_id } = req.params;
+  const { section_id } = req.params;
+  try {
+    const course = await CourseModal.findById(id);
+    console.log(id)
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
 
-// }
-
-// delete request
-// module.exports.DeleteCourse=async(req,res)=>{
-//     try{
-//         console.log(req.body);
-//         console.log(req.params.id)
-//         // if(mongoose.Types.ObjectId.isValid(id)) return res.status(404).json({message:'no course with that id found'});
-//         await CourseModal.deleteOne(req.param.id);
-//         res.status(200).json({message:'Course has been deleted'})
-//     }catch(err){
-//         res.status(404).json({message:err.message});
-//     }
-// }
+    const sectionIndex = course.syallabus.findIndex((Section) => Section.section_id === section_id);
+    if (sectionIndex === -1) {
+      return res.status(404).json({ message: 'Section not found' });
+    }
+    console.log(section_id)
+    console.log(sectionIndex)
+    const subSectionIndex = course.syallabus[sectionIndex].subSection.findIndex((subSection) => subSection.sub_id === sub_id);
+    console.log(sub_id)
+    console.log(subSectionIndex)
+    if (subSectionIndex === -1) {
+      return res.status(404).json({ message: 'SubSection not found' });
+    }
+    course.syallabus[sectionIndex].subSection.splice(subSectionIndex, 1);
+    await course.save();
+    res.json({ message: 'SubSection deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

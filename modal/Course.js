@@ -23,6 +23,5 @@ const CourseSchema = mongoose.Schema({
     default: new Date(),
   },
 });
-
 const CourseModal = mongoose.model("course", CourseSchema);
 module.exports = CourseModal;

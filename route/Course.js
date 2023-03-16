@@ -2,6 +2,7 @@ var express = require("express");
 var Course = require("../controller/Courses");
 const path = require("path");
 const multer = require("multer");
+var uploadImage = require("../service/firebase")
 // const uuid = require("uuid/v4");
 const router = express.Router();
 // var mongoose = require("mongoose");
@@ -27,7 +28,7 @@ const MyModel = require('../modal/Course')
  *           duration:
  *             type: integer
  *             descrption: this is course duration
- *           image:
+ *           file:
  *             type: file
  *             description: this is image
  *           description:
@@ -47,22 +48,6 @@ const MyModel = require('../modal/Course')
  *   description: Courses managing api
  */
 
-// /**
-//  * @swagger
-//  * /course:
-//  *   get:
-//  *     summary: Returns all courses
-//  *     tags: [Course]
-//  *     responses:
-//  *       200:
-//  *         description: this is the list of all courses
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: array
-//  *               items:
-//  *                 $ref: '#/components/schemas/course'
-//  */
 /**
  * @swagger
  * /course:
@@ -92,22 +77,40 @@ router.get("/:id", Course.getCourses);
  *        '201':
  *          description: A sucessfull response
  */
+// const Storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     console.log(req, file)
+//     cb(null, 'public');
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, file.originalname);
+//   },
+// });
+// const upload = multer({ storage: Storage });
+// router.post(
+//   "/files",
+//   upload.single("file"),
+//   Course.PostCourse
+//   // Course.PostCourse
+// );
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public");
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    cb(
+      null, file.originalname
+      // file.fieldname + "_" + Date.now() + path.extname(file.originalname),
+    );
   },
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage(), });
 router.post(
   "/files",
-  upload.single("file"),
+  upload.any("file"), uploadImage,
   Course.PostCourse
   // Course.PostCourse
 );
-
 // delete
 /**
  * @swagger
@@ -128,9 +131,8 @@ router.post(
 router.delete("/:id", Course.DeleteCourse);
 router.put(
   "/files/:id",
-  upload.single("file"),
+  upload.any("file"), uploadImage,
   Course.updateCourse
-
 );
 
 module.exports = router;

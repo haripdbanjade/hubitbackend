@@ -24,7 +24,7 @@ module.exports.PostCourse = async (req, res, upload) => {
   const courseData = req.body;
 
   try {
-    console.log(courseData, req.file, "worked");
+    console.log(courseData, req.file, req.files, "worked");
     // const file = `${process.env.APP_HOSTING_ADDRESS + req.file.filename}`;
     const url = req.protocol + "://" + req.get("host");
     const newCourse = new CourseModal({
@@ -33,9 +33,9 @@ module.exports.PostCourse = async (req, res, upload) => {
       duration: courseData.duration,
       description: courseData.description,
       syallabus: [],
-      image: req?.file?.path,
+      image: req?.files[0].firebaseUrl,
     });
-
+    console.log(req?.files[0].firebaseUrl)
     await newCourse.save();
     res
       .status(201)
@@ -45,36 +45,28 @@ module.exports.PostCourse = async (req, res, upload) => {
   }
 };
 
-// Update request
+
+// update request
 module.exports.updateCourse = (req, res) => {
+  const { id } = req.params;
+  const { course_name, course_category, duration, description } = req.body;
+  const imagePath = req?.files[0].firebaseUrl;
 
-
-  CourseModal.updateOne({ _id: req.params.id }, { $set: req.body }, (error) => {
-    if (error) {
-      console.log(error);
-      res.send(error);
-    } else {
-
-      console.log(req.file)
-      console.log('Success');
-      res.send('Success');
+  CourseModal.findByIdAndUpdate(
+    id,
+    { $set: { course_name, course_category, duration, description, image: imagePath } },
+    { new: true },
+    (error, updatedCourse) => {
+      if (error) {
+        console.log(error);
+        res.send(error);
+      } else {
+        console.log(updatedCourse);
+        res.send(updatedCourse);
+      }
     }
-  });
+  );
 };
-// Update request for Image
-// module.exports.updateCourseImage = (req, res, upload) => {
-//   CourseModal.updateOne({ _id: req.params.id }, { $set: req?.file?.path }, (error) => {
-//     if (error) {
-//       console.log(error)
-//       res.send(error);
-
-//     }
-//     else {
-//       console.log(req.body)
-//     }
-//   })
-// }
-// single task update
 // Delete request
 module.exports.DeleteCourse = (req, res) => {
   CourseModal.findByIdAndDelete(req.params.id, (err, data) => {
