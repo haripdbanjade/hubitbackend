@@ -1,6 +1,7 @@
 const express = require("express");
 const Placement = require("../controller/placement");
 const path = require("path");
+const uploadImage = require("../service/firebase")
 const multer = require("multer");
 // const uuid = require("uuid/v4");
 const router = express.Router();
@@ -76,10 +77,10 @@ const storage = multer.diskStorage({
     },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage(), });
 router.post(
     "/files",
-    upload.single("file"),
+    upload.any("file"), uploadImage,
     Placement.postPlacement
 );
 // router.post("/files/:id", \\\)
@@ -89,7 +90,7 @@ router.delete("/:id", Placement.DeletePlacement);
 // update
 router.put(
     "/files/:id",
-    upload.single("file"),
+    upload.any("file"), uploadImage,
     Placement.updatePlacement
 
 );

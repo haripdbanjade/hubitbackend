@@ -34,7 +34,7 @@ module.exports.PostOnlineForm = async (req, res, upload) => {
         console.log(req.file, req.body);
         // const url = req.protocol + '://' + req.get('host')
         const newForm = new formModel({
-            image: req?.file?.path,
+            image: req.files[0].firebaseUrl,
             full_name: req.body.full_name,
             address: req.body.address,
             dob: req.body.dob,
@@ -59,7 +59,7 @@ module.exports.PostOnlineForm = async (req, res, upload) => {
 module.exports.updateForm = (req, res) => {
     const { id } = req.params;
     const { name, address, dateOfBirth, email, phone, gender, levelOfEducation, guardianName, guardianNumber, collegeOrSchoolName, courseName, shiftTime } = req.body;
-    const imagePath = req?.file?.path;
+    const imagePath = req?.file[0].firebaseUrl;
 
     formModel.findByIdAndUpdate(
         id,

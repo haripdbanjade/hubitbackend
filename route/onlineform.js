@@ -3,6 +3,7 @@ var onlineForm = require("../controller/onlineform");
 const path = require("path");
 const multer = require("multer");
 const router = express.Router();
+const uploadImage = require("../service/firebase")
 /**
  * @swagger
  * components:
@@ -18,7 +19,7 @@ const router = express.Router();
  *           file:
  *             type: file
  *             description: this is image
- *           name:
+ *           full_name:
  *             type: string
  *             description: this is name
  *           address:
@@ -121,10 +122,10 @@ const storage = multer.diskStorage({
  *        '201':
  *          description: A sucessfull response
  */
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage(), });
 router.post(
     "/files",
-    upload.single("file"),
+    upload.any("file"), uploadImage,
     onlineForm.PostOnlineForm
 
 );
@@ -135,7 +136,7 @@ router.delete("/:id", onlineForm.DeleteForm);
 // update
 router.put(
     "/files/:id",
-    upload.single("file"),
+    upload.any("file"), uploadImage,
     onlineForm.updateForm
 
 );

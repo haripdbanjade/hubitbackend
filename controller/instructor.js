@@ -105,7 +105,7 @@ module.exports.PostInstructor = async (req, res, upload) => {
 module.exports.updateInstructor = (req, res) => {
     const { id } = req.params;
     const { name, post, email, aboutMe, skill, experience } = req.body;
-    const imagePath = req?.file?.path;
+    const imagePath = req?.files[0].firebaseUrl;
 
     InstructorModal.findByIdAndUpdate(
         id,

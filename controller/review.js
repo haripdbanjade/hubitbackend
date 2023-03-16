@@ -28,7 +28,7 @@ module.exports.PostReview = async (req, res, upload) => {
         // const file = `${process.env.APP_HOSTING_ADDRESS + req.file.filename}`;
         const url = req.protocol + "://" + req.get("host");
         const newReview = new ReviewModel({
-            image: req?.file?.path,
+            image: req?.files[0].firebaseUrl,
             name: reviewData.name,
             course_name: reviewData.course_name,
             description: reviewData.description,
@@ -49,7 +49,7 @@ module.exports.PostReview = async (req, res, upload) => {
 // module.exports.updateCourse = (req, res) => {
 //   const { id } = req.params;
 //   const { course_name, course_category, duration, description } = req.body;
-//   const imagePath = req?.file?.path;
+//   const imagePath = req?.files[0].firebaseUrl;
 
 //   CourseModal.findByIdAndUpdate(
 //     id,

@@ -2,6 +2,7 @@ var express = require("express");
 var Course = require("../controller/Courses");
 const path = require("path");
 const multer = require("multer");
+var uploadImage = require("../service/firebase")
 // const uuid = require("uuid/v4");
 const router = express.Router();
 // var mongoose = require("mongoose");
@@ -103,10 +104,10 @@ const storage = multer.diskStorage({
     );
   },
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage(), });
 router.post(
   "/files",
-  upload.single("file"),
+  upload.any("file"), uploadImage,
   Course.PostCourse
   // Course.PostCourse
 );
@@ -130,7 +131,7 @@ router.post(
 router.delete("/:id", Course.DeleteCourse);
 router.put(
   "/files/:id",
-  upload.single("file"),
+  upload.any("file"), uploadImage,
   Course.updateCourse
 );
 

@@ -27,7 +27,7 @@ module.exports.Postachievement = async (req, res, upload) => {
 
         const url = req.protocol + '://' + req.get('host')
         const newachievement = new achievementModel({
-            image: req?.file?.path,
+            image: req?.files[0].firebaseUrl,
             title: req.body.title,
             source: req.body.source,
             date: req.body.date,

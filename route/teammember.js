@@ -2,6 +2,7 @@ var express = require("express");
 var TeamMember = require("../controller/teammember");
 const path = require("path");
 const multer = require("multer");
+const uploadImage = require("../service/firebase")
 // const uuid = require("uuid/v4");
 const router = express.Router();
 // var mongoose = require("mongoose");
@@ -35,20 +36,20 @@ const storage = multer.diskStorage({
         cb(null, file.originalname);
     },
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage(), });
 router.post(
     "/files",
-    upload.single("file"),
+    upload.any("file"), uploadImage,
     TeamMember.PostteamMember
 );
-router.post("/files/:id", TeamMember.PostteamMember)
+router.post("/files/:id", upload.any("files"), uploadImage, TeamMember.PostteamMember)
 // delete
 
 router.delete("/:id", TeamMember.DeleteTeamMember);
 // update
 router.put(
     "/files/:id",
-    upload.single("file"),
+    upload.any("file"), uploadImage,
     TeamMember.updateteamMember
 
 );

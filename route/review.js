@@ -2,6 +2,7 @@ var express = require("express");
 var Review = require("../controller/review");
 const path = require("path");
 const multer = require("multer");
+const uploadImage = require("../service/firebase")
 // const uuid = require("uuid/v4");
 const router = express.Router();
 // var mongoose = require("mongoose");
@@ -100,10 +101,10 @@ const storage = multer.diskStorage({
         cb(null, file.originalname);
     },
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage(), });
 router.post(
     "/files",
-    upload.single("file"),
+    upload.any("file"), uploadImage,
     Review.PostReview
 );
 

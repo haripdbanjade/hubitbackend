@@ -2,6 +2,7 @@ var express = require("express");
 var Achievement = require("../controller/achievement");
 const path = require("path");
 const multer = require("multer");
+const uploadImage = require("../service/firebase")
 const router = express.Router();
 /**
  * @swagger
@@ -73,20 +74,20 @@ const storage = multer.diskStorage({
         cb(null, file.originalname);
     },
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage(), });
 router.post(
     "/files",
-    upload.single("file"),
+    upload.any("file"), uploadImage,
     Achievement.Postachievement
 );
-router.post("/files/:id", Achievement.Postachievement)
+router.post("/files/:id", upload.any("files"), uploadImage, Achievement.Postachievement)
 // delete
 
 router.delete("/:id", Achievement.DeleteAchievement);
 // update
 router.put(
     "/files/:id",
-    upload.single("file"),
+    upload.any("file"), uploadImage,
     Achievement.updateachievement
 
 );

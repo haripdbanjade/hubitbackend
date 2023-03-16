@@ -37,7 +37,7 @@ module.exports.PostCategory = async (req, res, upload) => {
     const newCategory = new CategoryModal({
       category_name: CategoryData.category_name,
       color: CategoryData.color,
-      image: req?.file?.path
+      image: req?.files[0].firebaseUrl
 
     });
     await newCategory.save();
@@ -48,6 +48,30 @@ module.exports.PostCategory = async (req, res, upload) => {
     res.status(404).json({ message: err.message });
   }
 };
+
+// update request
+// update request
+module.exports.updateCategory = (req, res) => {
+  const { id } = req.params;
+  const { category_name, color } = req.body;
+  const imagePath = req?.files[0].firebaseUrl;
+
+  CourseModal.findByIdAndUpdate(
+    id,
+    { $set: { category_name, color, image: imagePath } },
+    { new: true },
+    (error, updatedCategory) => {
+      if (error) {
+        console.log(error);
+        res.send(error);
+      } else {
+        console.log(updatedCategory);
+        res.send(updatedCategory);
+      }
+    }
+  );
+};
+
 // Delete request
 module.exports.DeleteCategory = (req, res) => {
   CategoryModal.findByIdAndDelete(req.params.id, (err, data) => {

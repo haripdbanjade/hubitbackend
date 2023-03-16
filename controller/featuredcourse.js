@@ -32,7 +32,7 @@ module.exports.PostFeaturedCourse = async (req, res, upload) => {
         await featuredCourseData.validate(req.body);
         const url = req.protocol + '://' + req.get('host')
         const newFeaturedCourse = new featureCourseModal({
-            image: req?.file?.path,
+            image: req?.files[0].firebaseUrl,
             title: req.body.title,
             description: req.body.description,
             startedDate: req.body.startedDate,
@@ -48,7 +48,7 @@ module.exports.PostFeaturedCourse = async (req, res, upload) => {
 module.exports.updateFeaturedCourse = (req, res) => {
     const { id } = req.params;
     const { title, startedDate, description } = req.body;
-    const imagePath = req?.file?.path;
+    const imagePath = req?.files[0].firebaseUrl;
 
     CourseModal.findByIdAndUpdate(
         id,

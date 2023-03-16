@@ -29,7 +29,7 @@ module.exports.postPlacement = async (req, res, upload) => {
         await placementData.validate(req.body);
         const url = req.protocol + '://' + req.get('host')
         const newPlacement = new plaecementModel({
-            image: req?.file?.path,
+            image: req?.files[0].firebaseUrl,
             name: req.body.name,
             post: req.body.post,
             office: req.body.office,
@@ -45,7 +45,7 @@ module.exports.postPlacement = async (req, res, upload) => {
 module.exports.updatePlacement = (req, res) => {
     const { id } = req.params;
     const { name, post, office } = req.body;
-    const imagePath = req?.file?.path;
+    const imagePath = req?.files[0].firebaseUrl;
 
     plaecementModel.findByIdAndUpdate(
         id,

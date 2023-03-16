@@ -27,7 +27,7 @@ module.exports.PostteamMember = async (req, res, upload) => {
         // await teamMemberData.validate(req.body);
         const url = req.protocol + '://' + req.get('host')
         const newteamMember = new teamMemberModel({
-            image: req?.file?.path,
+            image: req?.files[0].firebaseUrl,
             name: req.body.name,
             position: req.body.post,
         });
@@ -41,7 +41,7 @@ module.exports.PostteamMember = async (req, res, upload) => {
 module.exports.updateteamMember = (req, res) => {
     const { id } = req.params;
     const { name, position } = req.body;
-    const imagePath = req?.file?.path;
+    const imagePath = req?.files[0].firebaseUrl;
 
     teamMemberModel.findByIdAndUpdate(
         id,

@@ -17,6 +17,55 @@ module.exports.getSyallabus = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+// Get a single syllabus item
+// Get a single section
+module.exports.getSingleSection = async (req, res) => {
+  try {
+    const course = await CourseModal.findById(req.params.id);
+    // console.log(course)
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+    const Section = course.syallabus.find(item => item.section_id === req.params.section_id);
+    if (!Section) {
+      return res.status(404).json({ message: 'Section not found' });
+    }
+    res.json(Section);
+    // console.log(section)
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+// get single sub section
+// Get a single sub-section
+// module.exports.getSingleSubSection = async (req, res) => {
+//   try {
+//     const course = await CourseModal.findById(req.params.id);
+//     // console.log(course)
+//     if (!course) {
+//       return res.status(404).json({ message: 'Course not found' });
+//     }
+//     const Section = course.syallabus.find(item => item.section_id === req.params.section_id);
+//     if (!Section) {
+//       return res.status(404).json({ message: 'Section not found' });
+//     }
+//     const subSection = Section.subSection.find(item => item.sub_id === req.params.sub_id);
+//     console.log(subSection)
+//     if (!subSection) {
+//       return res.status(404).json({ message: 'Sub-section not found' });
+//     }
+//     res.json(subSection);
+//     console.log(subSection)
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };
+
+
+
+
 //section post request
 // module.exports.PostSyallabus = async (req, res) => {
 //   const { Section } = req.body;
