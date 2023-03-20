@@ -19,7 +19,7 @@ const router = express.Router();
  * /instructor:
  *   get:
  *     summary: Returns all form contents
- *     tags: [onlineform]
+ *     tags: [Instructor]
  *     responses:
  *        '200':
  *          description: A successful Response

@@ -3,25 +3,59 @@ var QuickCall = require("../controller/QuickCalls");
 // const path = require("path");
 // const multer = require("multer");
 const router = express.Router();
-// var mongoose = require("mongoose");
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     quickcallDto:
+ *         type: object
+ *         required:
+ *           - name
+ *         properties:
+ *           _id:
+ *              type: string
+ *              description: this is auto genereated id
+ *           name:
+ *             type: string
+ *             description: this  name
+ *           phone:
+ *             type: string
+ *             description: this is phone
+ */
+
 /**
  * @swagger
  * tags:
- *   name: quickcallroute
- *   description: quickcall manageing api
+ *   name: Quickcall
+ *   description: Quickcall managing api
  */
 
 /**
  * @swagger
  * /quickcall:
- *   get:
- *     summary: Returns all Inquire contents
- *     tags: [Inquire]
+ *  get:
+ *     summary: Use to request all quickcall
+ *     tags: [QuickCall]
  *     responses:
  *        '200':
- *          description: A successful Response
+ *          description: A sucessfull response
  */
-
+/**
+ * @swagger
+ * /quickcall:
+ *  post:
+ *    summary: create new quickcalls
+ *    tags: [Quickcall]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/quickcallDto'
+ *    responses:
+ *        '201':
+ *          description: A sucessfull response
+ */
 router.get("/", QuickCall.getQuickCall);
 router.get("/:id", QuickCall.getQuick)
 router.post("/", QuickCall.PostQuickCall);

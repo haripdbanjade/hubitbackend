@@ -64,7 +64,6 @@ const path = require("path");
 
 const router = express.Router();
 router.get("/:id", Syallabus.getSyallabus);
-
 /**
  * @swagger
  * /course/{id}/syallabus:
@@ -101,6 +100,9 @@ router.post('/:id', Syallabus.PostSyallabus)
  *           SubSection:
  *             type: string
  *             description: this sub section name
+ *           section_id:
+ *             type: string
+ *             description: this is section_id
  *         example:
  *           _id: dfs43gfsdghshdsj
  *           SubSection: kisan mahat
@@ -132,7 +134,6 @@ router.post('/:id', Syallabus.PostSyallabus)
 
 
 router.delete("/:id/:section_id", Syallabus.DeleteSection);
-
 router.post("/subsection/:id", Syallabus.PostSubSection);
 router.put("/:id/:section_id", Syallabus.UpdateSection);
 router.delete("/subsection/:id/:section_id/:sub_id", Syallabus.deleteSubSection);

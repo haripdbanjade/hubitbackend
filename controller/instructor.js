@@ -14,23 +14,13 @@ module.exports.getInstructor = async (req, res) => {
     }
 }
 
-
-// module.exports.getSingleInstructor = async (req, res) => {
-//     try {
-//         const singleInstructorData = await InstructorModal.findById({ _id: req.params.id });
-//         res.status(200).json({ data: singleInstructorData, message: "InstructorData  fetched" });
-//     } catch (err) {
-//         res.status(404).json({ messege: err.message, status: err.status });
-//     }
-// }
 module.exports.getSingleInstructorFromCourse = async (req, res) => {
-    // const courseId = req.params.courseId;
-    // const id = req.params.id;
-    console.log(id);
-    console.log(courseId)
+    const courseId = req.params.courseId
     try {
+        console.log(req.params.courseId)
         const instructors = await InstructorModal.find({ courseId });
-        console.log(instructors)
+        // console.log(instructors)
+        console.log(courseId)
         if (instructors.length === 0) {
             return res.status(404).json({ message: "No instructors found for this course" });
         }
@@ -39,40 +29,10 @@ module.exports.getSingleInstructorFromCourse = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 }
-// // post request 
-// module.exports.PostInstructor = async (req, res, upload) => {
-//     const instructorData = yup.object().shape({
-//         name: yup.string().required("name is required"),
-//         post: yup.string().required("post is required"),
-//         email: yup.string().required("no input for email").email("valid email is required"),
 
-//     })
-//     try {
-//         await instructorData.validate(req.body);
-//         const url = req.protocol + '://' + req.get('host')
-//         const newInstructor = new InstructorModal({
-//             image: req?.file?.path,
-//             name: req.body.name,
-//             post: req.body.post,
-//             email: req.body.email,
-//             aboutMe: req.body.aboutMe,
-//             skill: req.body.skill,
-//             experience: req.body.experience,
-//             courseId: req.body.courseId,
-//         });
-
-//         await newInstructor.save();
-//         console.log(newInstructor)
-//         res.status(201).json({ data: newInstructor, message: 'instructorData has been addded' })
-//     } catch (err) {
-//         res.status(422).json({ message: err.message })
-//     }
-// }
 module.exports.PostInstructor = async (req, res, upload) => {
     const instructorData = yup.object().shape({
-        name: yup.string().required("name is required"),
-        post: yup.string().required("post is required"),
-        email: yup.string().required("no input for email").email("valid email is required"),
+
         // courseId: yup.string().required("courseId is required")
     })
     try {
@@ -83,7 +43,7 @@ module.exports.PostInstructor = async (req, res, upload) => {
             return res.status(404).json({ message: "Course not found" });
         }
         const newInstructor = new InstructorModal({
-            image: req?.file?.path,
+            image: req?.files[0].firebaseUrl,
             name: req.body.name,
             post: req.body.post,
             email: req.body.email,
@@ -92,7 +52,7 @@ module.exports.PostInstructor = async (req, res, upload) => {
             experience: req.body.experience,
             courseId: req.body.courseId,
         });
-
+        // console.log(courseId)
         await newInstructor.save();
         console.log(newInstructor)
         res.status(201).json({ data: newInstructor, message: 'instructorData has been addded' })

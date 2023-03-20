@@ -74,7 +74,7 @@ const uploadImage = require("../service/firebase")
 //  * /onlineform:
 //  *   get:
 //  *     summary: Returns all courses
-//  *     tags: [Course]
+//  *     tags: [onlineform]
 //  *     responses:
 //  *       200:
 //  *         description: this is the list of all courses
@@ -90,14 +90,13 @@ const uploadImage = require("../service/firebase")
  * /onlineform:
  *  get:
  *     summary: Use to request all course
- *     tags: [Course]
+ *     tags: [onlineform]
  *     responses:
  *        '200':
  *          description: A sucessfull response
  */
 router.get("/", onlineForm.getOnlineForm);
 router.get("/:id", onlineForm.getForm);
-
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "public");
@@ -129,7 +128,6 @@ router.post(
     onlineForm.PostOnlineForm
 
 );
-
 // delete
 
 router.delete("/:id", onlineForm.DeleteForm);

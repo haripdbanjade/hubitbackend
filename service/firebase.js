@@ -15,6 +15,7 @@ const uploadImage = (req, res, next) => {
     req.files.map((val, i) => {
         const Images = val;
         const Name = uuid.v4() + Images.originalname.split(".").pop();
+        console.log(Name)
         const file = bucket.file(Name);
         console.log(file);
 

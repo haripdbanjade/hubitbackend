@@ -16,7 +16,7 @@ const router = express.Router();
  * /aboutus:
  *   get:
  *     summary: Returns all Aboutus contents
- *     tags: [Inquire]
+ *     tags: [Aboutus]
  *     responses:
  *        '200':
  *          description: A successful Response

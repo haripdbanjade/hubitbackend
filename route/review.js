@@ -69,7 +69,7 @@ const router = express.Router();
  * /review:
  *  get:
  *     summary: Use to request all course
- *     tags: [Course]
+ *     tags: [Review]
  *     responses:
  *        '200':
  *          description: A sucessfull response
@@ -82,7 +82,7 @@ router.get("/", Review.getReview);
  * /review/files:
  *  post:
  *    summary: create new courses
- *    tags: [Course]
+ *    tags: [Review]
  *    requestBody:
  *      required: true
  *      content:

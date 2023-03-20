@@ -1,13 +1,10 @@
 const mongoose = require("mongoose");
 const CategoryModal = require("../modal/Category");
-//import vvalidator and tokens
-const jwt = require("jsonwebtoken");
-const { body, validationResult } = require("express-validator");
-
-function generateAccessToken(user) {
-  return jwt.sign(user, process.env.SECRET_KEY, { expiresIn: "1800s" });
-}
-
+// const jwt = require("jsonwebtoken");
+// const { body, validationResult } = require("express-validator");
+// function generateAccessToken(user) {
+//   return jwt.sign(user, process.env.SECRET_KEY, { expiresIn: "1800s" });
+// }
 // get request
 module.exports.getCategory = async (req, res) => {
   try {

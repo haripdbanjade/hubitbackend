@@ -14,7 +14,7 @@ const router = express.Router();
  * /featuredcourse:
  *   get:
  *     summary: Returns all Inquire contents
- *     tags: [Inquire]
+ *     tags: [FeaturedCourse]
  *     responses:
  *        '200':
  *          description: A successful Response

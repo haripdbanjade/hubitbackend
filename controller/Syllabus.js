@@ -111,7 +111,6 @@ module.exports.PostSyallabus = async (req, res, upload) => {
     res.status(404).json({ message: 'oops' })
   }
 }
-
 // sub section
 module.exports.PostSubSection = async (req, res) => {
   var { id } = req.params;
