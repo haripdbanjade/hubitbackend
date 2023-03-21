@@ -12,7 +12,7 @@ const CourseSchema = mongoose.Schema({
       subSection: [
         {
           subSection: String,
-          id: String,
+          sub_id: String,
         },
       ],
     },

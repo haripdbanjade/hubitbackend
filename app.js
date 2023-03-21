@@ -66,6 +66,31 @@ app.use("/achievement", Achievement)
 app.use("/placement", Placement);
 // app.use("/login", Login);
 // app.use("/user", User);
+
+const Courses = require('./modal/Course');
+
+app.use(async function (req, res, next) {
+  const course_name = req.query.course_name;
+  const course_category = req.query.course_category;
+
+  let filteredCourses;
+
+  if (course_name && category_name) {
+    filteredCourses = await Course.find({ name: { $regex: course_name, $options: 'i' }, category: { $regex: course_category, $options: 'i' } });
+  } else if (course_name) {
+    filteredCourses = await Course.find({ name: { $regex: course_name, $options: 'i' } });
+  } else if (course_category) {
+    filteredCourses = await Course.find({ category: { $regex: course_category, $options: 'i' } });
+  } else {
+    filteredCourses = await Courses.find();
+  }
+  req.filteredData = filteredCourses;
+  next();
+});
+app.post('/courses', function (req, res) {
+  res.json(req.filteredData);
+});
+
 // mongoodb connection
 const CONNECTION_URL = process.env.CONNECTION_URL;
 const PORT = process.env.PORT || 4000;

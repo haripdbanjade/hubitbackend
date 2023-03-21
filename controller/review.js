@@ -32,7 +32,6 @@ module.exports.PostReview = async (req, res, upload) => {
             name: reviewData.name,
             course_name: reviewData.course_name,
             description: reviewData.description,
-
         });
 
         await newReview.save();

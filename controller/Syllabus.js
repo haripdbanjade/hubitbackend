@@ -177,35 +177,71 @@ module.exports.UpdateSection = async (req, res) => {
   }
 };
 
-// sub section delete
+// 
+//  delete sub section
 module.exports.deleteSubSection = async (req, res) => {
-  const { id } = req.params;
-  const { sub_id } = req.params;
-  const { section_id } = req.params;
   try {
-    const course = await CourseModal.findById(id);
-    console.log(id)
-    if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
-    }
-
-    const sectionIndex = course.syallabus.findIndex((Section) => Section.section_id === section_id);
+    const course = await CourseModal.findById(req.params.id);
+    const sectionIndex = course.syallabus.findIndex(
+      (Section) => Section.section_id === req.params.section_id
+    );
     if (sectionIndex === -1) {
       return res.status(404).json({ message: 'Section not found' });
     }
-    console.log(section_id)
-    console.log(sectionIndex)
-    const subSectionIndex = course.syallabus[sectionIndex].subSection.findIndex((subSection) => subSection.sub_id === sub_id);
-    console.log(sub_id)
+    const subSectionIndex = course.syallabus[sectionIndex].subSection.findIndex(
+      (subSection) => subSection.sub_id === req.params.sub_id
+    );
     console.log(subSectionIndex)
+    console.log(req.params.sub_id)
     if (subSectionIndex === -1) {
-      return res.status(404).json({ message: 'SubSection not found' });
+      return res.status(404).json({ message: 'Sub Section not found' });
     }
     course.syallabus[sectionIndex].subSection.splice(subSectionIndex, 1);
+
     await course.save();
-    res.json({ message: 'SubSection deleted successfully' });
+    res.json({ message: 'Sub Section has been deleted' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+
+
+
+
+// // sub section delete
+// module.exports.deleteSubSection = async (req, res) => {
+//   const { id } = req.params;
+//   const { sub_id } = req.params;
+//   const { section_id } = req.params;
+//   // console.log(id)
+//   // console.log(section_id, "jshdgj")
+//   // console.log(sub_id)
+//   try {
+//     const course = await CourseModal.findById(id);
+//     if (!course) {
+//       return res.status(404).json({ message: 'Course not found' });
+//     }
+
+//     const sectionIndex = course.syallabus.findIndex((Section) => Section.section_id === section_id);
+//     if (sectionIndex === -1) {
+//       return res.status(404).json({ message: 'Section not found' });
+//     }
+//     // console.log(section_id)
+
+//     // console.log(course.syallabus[sectionIndex].subSection.findIndex((subSection)), "jehfddhskjkkjjsjhdjshd"
+//     // )
+//     const subSectionIndex = course.syallabus[sectionIndex].subSection.findIndex((subSection) => subSection.sub_id === sub_id);
+//     console.log(subSectionIndex)
+//     if (subSectionIndex === -1) {
+//       return res.status(404).json({ message: 'SubSection not found' });
+//     }
+//     course.syallabus[sectionIndex].subSection.splice(subSectionIndex, 1);
+//     await course.save();
+//     res.json({ message: 'SubSection deleted successfully' });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };

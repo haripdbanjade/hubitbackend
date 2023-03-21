@@ -44,8 +44,8 @@ const router = express.Router();
 /**
  * @swagger
  * tags:
- *   name: Course
- *   description: Courses managing api
+ *   name: Review
+ *   description: Review managing api
  */
 
 // /**
@@ -114,6 +114,7 @@ router.post(
  * /review/{userId}:
  *  delete:
  *      description: Delete user
+ *      tags: [Review]
  *      parameters:
  *        - in: path
  *          name: userId

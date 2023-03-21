@@ -117,6 +117,7 @@ router.post(
  * /course/{userId}:
  *  delete:
  *      description: Delete user
+ *      tags: [Course]
  *      parameters:
  *        - in: path
  *          name: userId

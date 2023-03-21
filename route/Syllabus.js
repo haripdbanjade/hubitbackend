@@ -136,7 +136,7 @@ router.post('/:id', Syallabus.PostSyallabus)
 router.delete("/:id/:section_id", Syallabus.DeleteSection);
 router.post("/subsection/:id", Syallabus.PostSubSection);
 router.put("/:id/:section_id", Syallabus.UpdateSection);
-router.delete("/subsection/:id/:section_id/:sub_id", Syallabus.deleteSubSection);
+router.delete("/:id/:section_id/:sub_id", Syallabus.deleteSubSection);
 router.get("/:id/:section_id", Syallabus.getSingleSection)
 // router.get("/subsection/:id/:section_id/:sub_id", Syallabus.getSingleSubSection)
 module.exports = router;
